@@ -70,7 +70,7 @@ app.get("/signers", (req, res) => {
     signatures
         .getSignatures()
         .then(rows => {
-            // console.log(signers);
+            console.log(rows);
             res.render("signers", {
                 layout: "main",
                 rows
