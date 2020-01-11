@@ -3,6 +3,7 @@ const app = express();
 const hb = require("express-handlebars");
 const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 //this configures express to use express-handlebars
 app.engine("handlebars", hb());
@@ -21,8 +22,17 @@ app.use(
     })
 );
 // secret encrips and maxAge determines the time length that the session will be open
-
 // to put id into cookie, when we insert we can  use the sql return syntax
+
+app.use(csurf());
+
+// don't forget this middleware, to prevent CSRF attacks,
+// and add <input type="hidden" name="_csrf" value="{{csrfToken}}"> in each form we add
+
+app.use(function(req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
 
 app.get("/", (req, res) => {
     res.redirect("/petition");
@@ -41,13 +51,21 @@ app.post("/petition", (req, res) => {
     let first = req.body.first;
     let last = req.body.last;
     let signature = req.body.signature;
+    // let cookie = req.session;
     console.log("first: ", first);
     console.log("last: ", last);
     console.log("signature: ", signature);
+    // if you don't have req.session."keyname" (which I have to set) and signature is not empty, set cookie (cookie.signId = result.rows[0].id)
     signatures
         .addSignatures(first, last, signature)
-        .then(function() {
-            res.redirect("/thanks");
+        .then(function(results) {
+            console.log("results: ", results);
+            console.log("results id: ", results.rows[0].id);
+            // cookie.signature = results.rows[0].id;
+            // console.log("cookie: ", cookie.signature);
+            res.render("thanks", {
+                signature
+            });
         })
         .catch(err => {
             console.log("err: ", err);
