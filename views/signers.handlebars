@@ -1,5 +1,10 @@
-<p>By now, this people signed the petition: </p>
-{{#rows}}
-{{first}} {{last}}
-{{/rows}}
-</p>
+
+
+<div id="signers-contaniner">
+    <h2 id="now">By now, this people signed the petition: </h2>
+    <div id="signers">
+        {{#rows}}
+        <p class="signer">{{first}} {{last}}</p>
+        {{/rows}}
+    </div>
+</div>

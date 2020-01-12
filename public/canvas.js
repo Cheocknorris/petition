@@ -2,6 +2,7 @@ console.log("check");
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+var sigInput = document.querySelector("input[name='signature']");
 // console.log(ctx);
 var x;
 var y;
@@ -36,6 +37,7 @@ canvas.addEventListener("mousemove", function(event) {
     canvas.addEventListener("mouseup", function() {
         console.log("mouse happened");
         mouseDown = false;
+        sigInput.value = canvasUrl;
         ctx.beginPath();
     });
     var canvasUrl = canvas.toDataURL();
