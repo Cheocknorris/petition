@@ -36,14 +36,27 @@ app.use(function(req, res, next) {
 // and add <input type="hidden" name="_csrf" value="{{csrfToken}}"> in each form we add
 
 app.get("/", (req, res) => {
-    res.redirect("/register");
+    console.log("cookie at /:", req.session);
+    if (req.session.signature) {
+        res.redirect("/thanks");
+    } else if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.redirect("/register");
+    }
 });
 
 app.get("/register", (req, res) => {
-    res.render("register", {
-        title: "Register",
-        layout: "main"
-    });
+    if (req.session.signature) {
+        res.redirect("/thanks");
+    } else if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.render("register", {
+            title: "Register",
+            layout: "main"
+        });
+    }
 });
 
 // app.get("/", (req, res) => {
@@ -95,11 +108,17 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("login", {
-        title: "Log in",
-        layout: "main",
-        userNotFound
-    });
+    if (req.session.signature) {
+        res.redirect("/thanks");
+    } else if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.render("login", {
+            title: "Log in",
+            layout: "main",
+            userNotFound
+        });
+    }
 });
 
 app.post("/login", (req, res) => {
