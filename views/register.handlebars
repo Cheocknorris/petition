@@ -1,0 +1,18 @@
+
+<div id="register-container">
+    <h1 class="title">Make Spiced Academy pet friendly</h1>
+    <img class="dog-small" src="\dogcode2.jpg" alt="">
+    <h3 class="subtitle">Register and make it happen!</h3>
+    {{#if err}}
+	<h2 class="error">You have to register to continue</h2>
+	{{/if}}
+    <form method = "POST">
+    <input id="name" name= "first" placeholder="First name">
+    <input name= "last" placeholder="Last name">
+    <input name="email" placeholder="Email Address">
+    <input name="password" placeholder="Password">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <button name="button">Submit signature</button>
+
+    </form>
+</div>

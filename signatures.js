@@ -13,11 +13,26 @@ exports.getSignatures = function() {
 
 // whenever we add values to queries, use $number to protect from attaks
 
-exports.addSignatures = function(first, last, signature) {
+exports.addSignatures = function(first, last, signature, userId) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature)
-        VALUES ($1, $2, $3)
+        `INSERT INTO signatures (first, last, signature, user_id)
+        VALUES ($1, $2, $3, $4)
         returning id`,
-        [first, last, signature]
+        [first, last, signature, userId]
+    );
+};
+
+exports.getUsers = function(email) {
+    return db.query(`SELECT * FROM users WHERE email=$1`, [email]);
+};
+
+// whenever we add values to queries, use $number to protect from attaks
+
+exports.addUsers = function(first, last, email, hashedPass) {
+    return db.query(
+        `INSERT INTO users (first, last, email, hashedPass)
+        VALUES ($1, $2, $3, $4)
+        returning id`,
+        [first, last, email, hashedPass]
     );
 };
