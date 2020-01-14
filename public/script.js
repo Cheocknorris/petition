@@ -10,11 +10,11 @@ $("button").on("mouseleave", function() {
     $("button").removeClass("hover-button");
 });
 
-$("a").on("mouseenter", function() {
-    $("a").addClass("hover-button");
-    console.log("mouseenter");
-});
-
-$("a").on("mouseleave", function() {
-    $("a").removeClass("hover-button");
-});
+// $("a").on("mouseenter", function() {
+//     $("a").addClass("hover-button");
+//     console.log("mouseenter");
+// });
+//
+// $("a").on("mouseleave", function() {
+//     $("a").removeClass("hover-button");
+// });

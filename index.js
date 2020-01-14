@@ -119,6 +119,9 @@ app.post("/profile", (req, res) => {
     let age = req.body.age;
     let city = req.body.city;
     let url = req.body.url;
+    console.log("age: ", age);
+    console.log("city: ", city);
+    console.log("url: ", url);
     cookie = req.session;
     console.log("post req in profile happening");
     // console.log("req body: ", req.body);
@@ -230,7 +233,7 @@ app.get("/thanks", (req, res) => {
 
 app.get("/signers", (req, res) => {
     signatures
-        .getSignatures()
+        .getSigners()
         .then(rows => {
             console.log(rows);
             res.render("signers", {
@@ -241,6 +244,11 @@ app.get("/signers", (req, res) => {
         .catch(err => {
             console.log(err);
         });
+});
+
+app.get("/signers/:city", (req, res) => {
+    console.log("city: ", req.params.city);
+    res.render("city");
 });
 
 app.listen(8080, () => console.log("listening"));

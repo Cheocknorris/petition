@@ -53,3 +53,12 @@ exports.addProfiles = function(age, city, url, user_id) {
         [age, city, url, user_id]
     );
 };
+
+exports.getSigners = function() {
+    return db
+        .query(
+            `SELECT signatures.user_id, users.first, users.last, profiles.age, profiles.city, profiles.url FROM signatures LEFT OUTER JOIN users ON signatures.user_id = users.id LEFT OUTER JOIN profiles ON users.id = profiles.user_id;
+`
+        )
+        .then(({ rows }) => rows);
+};
