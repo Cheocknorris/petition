@@ -13,17 +13,21 @@ exports.getSignatures = function() {
 
 // whenever we add values to queries, use $number to protect from attaks
 
-exports.addSignatures = function(first, last, signature, userId) {
+exports.addSignatures = function(signature, user_id) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature, user_id)
-        VALUES ($1, $2, $3, $4)
+        `INSERT INTO signatures (signature, user_id)
+        VALUES ($1, $2)
         returning id`,
-        [first, last, signature, userId]
+        [signature, user_id]
     );
 };
 
-exports.getUsers = function(email) {
+exports.getUsersEmail = function(email) {
     return db.query(`SELECT * FROM users WHERE email=$1`, [email]);
+};
+
+exports.getUsers = function() {
+    return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
 };
 
 // whenever we add values to queries, use $number to protect from attaks
@@ -34,5 +38,18 @@ exports.addUsers = function(first, last, email, hashedPass) {
         VALUES ($1, $2, $3, $4)
         returning id`,
         [first, last, email, hashedPass]
+    );
+};
+
+exports.getProfiles = function() {
+    return db.query(`SELECT * FROM profiles`).then(({ rows }) => rows);
+};
+
+exports.addProfiles = function(age, city, url, user_id) {
+    return db.query(
+        `INSERT INTO profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4)
+        returning id`,
+        [age, city, url, user_id]
     );
 };

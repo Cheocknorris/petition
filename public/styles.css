@@ -20,6 +20,16 @@ body {
     margin: 0px;
 }
 
+/* profile */
+#profile-container {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Noto Sans", sans-serif;
+    color: #484848;
+}
+
 /* Login */
 #login-container {
     display: flex;

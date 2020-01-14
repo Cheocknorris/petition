@@ -12,11 +12,11 @@ module.exports.hash = plainTextPass =>
 
 genSalt()
     .then(salt => {
-        console.log("salt: ", salt);
+        // console.log("salt: ", salt);
         return hash("monkey", salt);
     })
     .then(hashedPass => {
-        console.log("hashedPass: ", hashedPass);
+        // console.log("hashedPass: ", hashedPass);
         return compare("monkeys", hashedPass);
     })
     .then(val => console.log("val: ", val));

@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const bcrypt = require("./bcrypt");
 let userNotFound = false;
+let cookie;
 
 //this configures express to use express-handlebars
 app.engine("handlebars", hb());
@@ -75,7 +76,7 @@ app.post("/register", (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     let hashedPass;
-    let cookie = req.session;
+    cookie = req.session;
 
     // console.log("first: ", first);
     // console.log("last: ", last);
@@ -93,17 +94,43 @@ app.post("/register", (req, res) => {
             console.log(hash);
             return signatures.addUsers(first, last, email, hashedPass);
         })
-        .then(result => {
+        .then(results => {
             // console.log("result: ", result);
-            cookie.userId = result.rows[0].id;
+            cookie.userId = results.rows[0].id;
             console.log("cookie.userId: ", cookie.userId);
-            res.redirect("/login");
+            res.redirect("/profile");
         })
         .catch(err => {
             console.log("err: ", err);
             res.render("register", {
                 err
             });
+        });
+});
+
+app.get("/profile", (req, res) => {
+    res.render("profile", {
+        title: "Profile",
+        layout: "main"
+    });
+});
+
+app.post("/profile", (req, res) => {
+    let age = req.body.age;
+    let city = req.body.city;
+    let url = req.body.url;
+    cookie = req.session;
+    console.log("post req in profile happening");
+    // console.log("req body: ", req.body);
+
+    signatures
+        .addProfiles(age, city, url, cookie.userId)
+        .then(function(results) {
+            console.log("results: ", results);
+            res.redirect("/petition");
+        })
+        .catch(err => {
+            console.log("err: ", err);
         });
 });
 
@@ -124,17 +151,20 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
+    cookie = req.session;
+
     signatures
-        .getUsers(email)
-        .then(result => {
-            console.log(result);
-            if (result.rows.length > 0) {
+        .getUsersEmail(email)
+        .then(results => {
+            console.log("results: ", results);
+            if (results.rows.length > 0) {
                 bcrypt
-                    .compare(password, result.rows[0].hashedpass)
+                    .compare(password, results.rows[0].hashedpass)
                     .then(comparison => {
                         console.log("comparison:", comparison);
                         if (comparison) {
                             userNotFound = false;
+                            cookie.userId = results.rows[0].id;
                             res.redirect("/petition");
                         } else {
                             userNotFound = true;
@@ -165,17 +195,13 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     // console.log("post req happening");
     // console.log("req body: ", req.body);
-    let first = req.body.first;
-    let last = req.body.last;
+    cookie = req.session;
     let signature = req.body.signature;
-    let cookie = req.session;
-    console.log("first: ", first);
-    console.log("last: ", last);
     console.log("signature: ", signature);
     // if you don't have req.session."keyname" (which I have to set) and signature is not empty, set cookie (cookie.signId = result.rows[0].id)
 
     signatures
-        .addSignatures(first, last, signature, cookie.userId)
+        .addSignatures(signature, cookie.userId)
         .then(function(results) {
             console.log("results: ", results);
             console.log("results id: ", results.rows[0].id);
