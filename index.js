@@ -263,7 +263,14 @@ app.get("/signers/:city", (req, res) => {
         });
 });
 
-app.listen(8080, () => console.log("listening"));
+app.get("/profile/edit", (req, res) => {
+    console.log("edit req happening");
+    res.render("edit", {
+        layout: "main"
+    });
+});
+
+app.listen(process.env.PORT || 8080, () => console.log("listening"));
 
 // console.log("req.session before: ", req.session);
 // req.session.peppermint = "hello";

@@ -2,7 +2,10 @@
 
 const spicedPg = require("spiced-pg");
 
-const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+const db = spicedPg(
+    process.env.DATABASE_URL ||
+        "postgres:postgres:postgres@localhost:5432/petition"
+);
 
 // db.query(`SELECT * FROM cities`).then(result => console.log(result));
 // You can only get the rows in the Object
@@ -57,7 +60,7 @@ exports.addProfiles = function(age, city, url, user_id) {
 exports.getSigners = function() {
     return db
         .query(
-            `SELECT signatures.user_id, users.first, users.last, profiles.age, profiles.city, profiles.url FROM signatures LEFT OUTER JOIN users ON signatures.user_id = users.id LEFT OUTER JOIN profiles ON users.id = profiles.user_id;
+            `SELECT signatures.user_id, first, last, age, city, url FROM signatures LEFT OUTER JOIN users ON signatures.user_id = users.id LEFT OUTER JOIN profiles ON users.id = profiles.user_id;
 `
         )
         .then(({ rows }) => rows);
