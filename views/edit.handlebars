@@ -2,22 +2,22 @@
     <img class="dog-small" src="\dogcode2.jpg" alt="">
     <h2 class="subtitle">Edit your profile</h2>
     <form method = "POST">
+        {{#rows}}
     <p>Fist name</p>
-    <input name="first" placeholder="First name">
+    <input name="first" value={{first}}>
     <p>Last name</p>
-    <input name="last" placeholder="Last name">
+    <input name="last" value={{last}}>
     <p>Email address</p>
-    <input name="email" placeholder="Email address">
+    <input name="email" value={{email}}>
     <p>Password</p>
-    <input name="email" placeholder="">
+    <input name="password" value="">
     <p>Age</p>
-    <input name="age" placeholder="Age">
+    <input name="age" value={{age}}>
     <p>City</p>
-    <input name="city" placeholder="City">
-    <p>Email address</p>
-    <input name="email" placeholder="Email address">
+    <input name="city" value={{city}}>
     <p>Home page</p>
-    <input name="url" placeholder="Home page">
+    <input name="url" value={{url}}>
+        {{/rows}}
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button name="button">Submit</button>
     </form>

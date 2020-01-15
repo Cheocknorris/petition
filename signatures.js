@@ -80,3 +80,16 @@ exports.getSignersByCity = function(city) {
         )
         .then(({ rows }) => rows);
 };
+
+exports.getUsersData = function(id) {
+    return db
+        .query(
+            `SELECT first, last, email, age, city, url
+            FROM users
+            LEFT OUTER JOIN profiles
+            ON users.id = profiles.user_id
+            WHERE(users.id) = $1`,
+            [id]
+        )
+        .then(({ rows }) => rows);
+};

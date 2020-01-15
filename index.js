@@ -265,9 +265,19 @@ app.get("/signers/:city", (req, res) => {
 
 app.get("/profile/edit", (req, res) => {
     console.log("edit req happening");
-    res.render("edit", {
-        layout: "main"
-    });
+    console.log("session at edit: ", req.session);
+    signatures
+        .getUsersData(req.session.userId)
+        .then(rows => {
+            console.log("rows", rows);
+            res.render("edit", {
+                layout: "main",
+                rows
+            });
+        })
+        .catch(err => {
+            console.log("err: ", err);
+        });
 });
 
 app.listen(process.env.PORT || 8080, () => console.log("listening"));
