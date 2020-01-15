@@ -280,6 +280,34 @@ app.get("/profile/edit", (req, res) => {
         });
 });
 
+app.post("/profile/edit", (req, res) => {
+    // let first = req.body.first;
+    // let last = req.body.last;
+    // let email = req.body.email;
+    // let password = req.body.password;
+    // let hashedPass;
+    // console.log("first: ", first);
+    // console.log("last: ", last);
+    // console.log("email: ", email);
+    // console.log("password: ", password);
+
+    console.log("post req in edit happenig");
+    let age = req.body.age;
+    let city = req.body.city;
+    let url = req.body.url;
+    let userId = req.session.userId;
+    console.log("age: ", age);
+    console.log("city: ", city);
+    console.log("url: ", url);
+    console.log("req.session.userId: ", req.session.userId);
+
+    signatures.updateProfiles(age, city, url, userId).then(() => {
+        res.redirect("/signers").catch(err => {
+            console.log("err: ", err);
+        });
+    });
+});
+
 app.listen(process.env.PORT || 8080, () => console.log("listening"));
 
 // console.log("req.session before: ", req.session);

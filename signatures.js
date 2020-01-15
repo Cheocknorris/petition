@@ -88,8 +88,38 @@ exports.getUsersData = function(id) {
             FROM users
             LEFT OUTER JOIN profiles
             ON users.id = profiles.user_id
-            WHERE(users.id) = $1`,
+            WHERE users.id = $1`,
             [id]
         )
         .then(({ rows }) => rows);
 };
+
+exports.updateUsers = function(first, last, email, userId) {
+    return db.query(
+        `UPDATE users (first, last, email)
+        SET first = $1, last = $2, email = $3
+        WHERE users.id = $4`,
+        [first, last, email, userId]
+    );
+};
+
+exports.updateUsersPass = function(first, last, email, hashedPass, userId) {
+    return db.query(
+        `UPDATE users (first, last, email)
+        SET first = $1, last = $2, email = $3, hashedPass = $4
+        WHERE users.id = $5`,
+        [first, last, email, hashedPass, userId]
+    );
+};
+
+exports.updateProfiles = function(age, city, url, userId) {
+    return db.query(
+        `INSERT INTO profiles (age, city, url, user_id)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (user_id)
+         DO UPDATE SET age=$1, city=$2, url=$3`,
+        [age, city, url, userId]
+    );
+};
+//
+//
