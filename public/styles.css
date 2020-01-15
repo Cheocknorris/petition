@@ -209,7 +209,7 @@ button {
     color: #484848;
 }
 
-#signers {
+.signers {
     margin-top: 50px;
     margin-left: 100px;
     margin-right: 100px;
@@ -226,6 +226,14 @@ button {
     color: #484848;
     font-size: 15px;
     margin: 5px 10px 5px 10px;
+}
+
+/* by city */
+
+#city-contaniner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* for functions */

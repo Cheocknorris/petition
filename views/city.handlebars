@@ -1,1 +1,13 @@
-<h1>Something will show here</h1> 
+
+<div id="city-contaniner">
+    <h2 id="now">By now, this people signed the petition in your city: </h2>
+    <div class="signers">
+{{#rows}}
+    {{#if url}}
+<p class="signer"><a href="http://{{url}}" target="_blank">{{first}} {{last}}</a> {{age}} <a href="/signers/{{city}}">{{city}}</a></p>
+    {{else}}
+    <p class="signer">{{first}} {{last}} {{age}} <a href="/signers/{{city}}">{{city}}</a> </p>
+    {{/if}}
+{{/rows}}
+</div>
+</div>

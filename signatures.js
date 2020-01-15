@@ -62,3 +62,18 @@ exports.getSigners = function() {
         )
         .then(({ rows }) => rows);
 };
+
+exports.getSignersByCity = function(city) {
+    return db
+        .query(
+            `SELECT first, last, age, url
+            FROM users
+            JOIN signatures
+            ON users.id = signatures.user_id
+            JOIN profiles
+            ON users.id = profiles.user_id
+            WHERE LOWER(city) = LOWER($1)`,
+            [city]
+        )
+        .then(({ rows }) => rows);
+};

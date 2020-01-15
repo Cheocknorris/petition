@@ -242,13 +242,25 @@ app.get("/signers", (req, res) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            console.log("err: ", err);
         });
 });
 
 app.get("/signers/:city", (req, res) => {
+    // let city = req.params.city;
     console.log("city: ", req.params.city);
-    res.render("city");
+    signatures
+        .getSignersByCity(req.params.city)
+        .then(rows => {
+            console.log("rows: ", rows);
+            res.render("city", {
+                layout: "main",
+                rows
+            });
+        })
+        .catch(err => {
+            console.log("err: ", err);
+        });
 });
 
 app.listen(8080, () => console.log("listening"));
