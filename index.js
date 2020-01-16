@@ -295,25 +295,38 @@ app.post("/profile/edit", (req, res) => {
     console.log("password: ", password);
     console.log("userId: ", userId);
 
-    if (password) {
-        bcrypt
-            .hash(password)
-            .then(hashPass => {
-                // console.log("hashPass: ", hashPass);
-                hashedPass = hashPass;
-                console.log("hashedPass: ", hashedPass);
-                return hashedPass;
-            })
-            .then(hash => {
-                console.log(hash);
-                return signatures.updateUsersPass(
-                    userId,
-                    first,
-                    last,
-                    email,
-                    hashedPass
-                );
-            })
+    // if (password) {
+    //     bcrypt
+    //         .hash(password)
+    //         .then(hashPass => {
+    //             // console.log("hashPass: ", hashPass);
+    //             hashedPass = hashPass;
+    //             console.log("hashedPass: ", hashedPass);
+    //             return hashedPass;
+    //         })
+    //         .then(hash => {
+    //             console.log(hash);
+    //             return signatures.updateUsersPass(
+    //                 userId,
+    //                 first,
+    //                 last,
+    //                 email,
+    //                 hashedPass
+    //             );
+    //         })
+    //         .then(results => {
+    //             // console.log("result: ", result);
+    //             console.log("results: ", results);
+    //             res.redirect("/signers");
+    //         })
+    //         .catch(err => {
+    //             console.log("err: ", err);
+    //         });
+    // }
+
+    if (!password) {
+        return signatures
+            .updateUsers(userId, first, last, email)
             .then(results => {
                 // console.log("result: ", result);
                 console.log("results: ", results);
