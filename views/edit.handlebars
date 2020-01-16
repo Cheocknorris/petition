@@ -1,6 +1,9 @@
 <div id="profile-container">
     <img class="dog-small" src="\dogcode2.jpg" alt="">
     <h2 class="subtitle">Edit your profile</h2>
+    {{#if errorMessage}}
+	<h3 class="error">Don't forget the required fields</h3>
+	{{/if}}
     <form method = "POST">
         {{#rows}}
     <p>First name</p>

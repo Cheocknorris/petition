@@ -4,3 +4,8 @@
     <img id="signature-pic" src="{{signature}}">
     <a id="see" href="/signers">See who else has signed the petition</a>
 </div>
+<form method="POST" action="/signature/delete">
+<input type="hidden" name="_csrf" value="{{csrfToken}}">
+<button name="button">Delete your signature</button>
+
+</form>

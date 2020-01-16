@@ -96,7 +96,7 @@ exports.getUsersData = function(id) {
 
 exports.updateUsers = function(userId, first, last, email) {
     return db.query(
-        `UPDATE users 
+        `UPDATE users
         SET first = $2, last = $3, email = $4
         WHERE id = $1`,
         [userId, first, last, email]
@@ -122,4 +122,8 @@ exports.updateProfiles = function(age, city, url, userId) {
     );
 };
 //
+exports.deleteSignatures = function(id) {
+    return db.query(`DELETE FROM signatures WHERE id=$1`, [id]);
+};
+
 //

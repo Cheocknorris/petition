@@ -356,22 +356,20 @@ app.post("/profile/edit", (req, res) => {
                 });
         }
     }
+});
 
-    // if (!password) {
-    //     return signatures
-    //         .updateUsers(userId, first, last, email)
-    //         .then(results => {
-    //             // console.log("result: ", result);
-    //             console.log("results: ", results);
-    //             res.redirect("/signers");
-    //         })
-    //         .catch(err => {
-    //             console.log("err: ", err);
-    //         });
-    // }
-
-    //
-    //
+app.post("/signature/delete", (req, res) => {
+    console.log("delete signature request");
+    console.log("signature id: ", req.session.signature);
+    signatures
+        .deleteSignatures(req.session.signature)
+        .then(() => {
+            req.session.signature = null;
+            res.redirect("/petition");
+        })
+        .catch(err => {
+            console.log("err: ", err);
+        });
 });
 
 if (require.main == module) {
