@@ -329,17 +329,9 @@ app.post("/profile/edit", (req, res) => {
                     );
                 })
                 .then(() => {
-                    signatures
-                        .updateProfiles(age, city, url, userId)
-                        .then(() => {
-                            res.redirect("/signers").catch(err => {
-                                console.log("err: ", err);
-                            });
-                        });
+                    signatures.updateProfiles(age, city, url, userId);
                 })
-                .then(results => {
-                    // console.log("result: ", result);
-                    console.log("results: ", results);
+                .then(() => {
                     res.redirect("/signers");
                 })
                 .catch(err => {
@@ -353,23 +345,10 @@ app.post("/profile/edit", (req, res) => {
         } else {
             return signatures
                 .updateUsers(userId, first, last, email)
-                .then(results => {
-                    // console.log("result: ", result);
-                    console.log("results: ", results);
-                    res.redirect("/signers");
+                .then(() => {
+                    signatures.updateProfiles(age, city, url, userId);
                 })
                 .then(() => {
-                    signatures
-                        .updateProfiles(age, city, url, userId)
-                        .then(() => {
-                            res.redirect("/signers").catch(err => {
-                                console.log("err: ", err);
-                            });
-                        });
-                })
-                .then(results => {
-                    // console.log("result: ", result);
-                    console.log("results: ", results);
                     res.redirect("/signers");
                 })
                 .catch(err => {
