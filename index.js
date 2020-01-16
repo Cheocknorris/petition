@@ -372,6 +372,12 @@ app.post("/signature/delete", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session.signature = null;
+    req.session.userId = null;
+    res.redirect("/login");
+});
+
 if (require.main == module) {
     app.listen(process.env.PORT || 8080, () => console.log("listening"));
 }
