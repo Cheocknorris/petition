@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+exports.app = app;
 const hb = require("express-handlebars");
 const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
@@ -273,7 +274,8 @@ app.get("/profile/edit", (req, res) => {
             console.log("rows", rows);
             res.render("edit", {
                 layout: "main",
-                rows
+                rows,
+                errorMessage
             });
         })
         .catch(err => {
@@ -294,26 +296,91 @@ app.post("/profile/edit", (req, res) => {
     console.log("email: ", email);
     console.log("password: ", password);
     console.log("userId: ", userId);
+    let age = req.body.age;
+    let city = req.body.city;
+    let url = req.body.url;
+    console.log("age: ", age);
+    console.log("city: ", city);
+    console.log("url: ", url);
+    console.log("req.session.userId: ", req.session.userId);
 
-    // if (password) {
-    //     bcrypt
-    //         .hash(password)
-    //         .then(hashPass => {
-    //             // console.log("hashPass: ", hashPass);
-    //             hashedPass = hashPass;
-    //             console.log("hashedPass: ", hashedPass);
-    //             return hashedPass;
-    //         })
-    //         .then(hash => {
-    //             console.log(hash);
-    //             return signatures.updateUsersPass(
-    //                 userId,
-    //                 first,
-    //                 last,
-    //                 email,
-    //                 hashedPass
-    //             );
-    //         })
+    if (password) {
+        if (!first || !last || !email) {
+            errorMessage = true;
+            res.redirect("/profile/edit");
+        } else {
+            errorMessage = false;
+            bcrypt
+                .hash(password)
+                .then(hashPass => {
+                    // console.log("hashPass: ", hashPass);
+                    hashedPass = hashPass;
+                    console.log("hashedPass: ", hashedPass);
+                    return hashedPass;
+                })
+                .then(hash => {
+                    console.log(hash);
+                    return signatures.updateUsersPass(
+                        userId,
+                        first,
+                        last,
+                        email,
+                        hashedPass
+                    );
+                })
+                .then(() => {
+                    signatures
+                        .updateProfiles(age, city, url, userId)
+                        .then(() => {
+                            res.redirect("/signers").catch(err => {
+                                console.log("err: ", err);
+                            });
+                        });
+                })
+                .then(results => {
+                    // console.log("result: ", result);
+                    console.log("results: ", results);
+                    res.redirect("/signers");
+                })
+                .catch(err => {
+                    console.log("err: ", err);
+                });
+        }
+    } else if (!password) {
+        if (!first || !last || !email) {
+            errorMessage = true;
+            res.redirect("/profile/edit");
+        } else {
+            return signatures
+                .updateUsers(userId, first, last, email)
+                .then(results => {
+                    // console.log("result: ", result);
+                    console.log("results: ", results);
+                    res.redirect("/signers");
+                })
+                .then(() => {
+                    signatures
+                        .updateProfiles(age, city, url, userId)
+                        .then(() => {
+                            res.redirect("/signers").catch(err => {
+                                console.log("err: ", err);
+                            });
+                        });
+                })
+                .then(results => {
+                    // console.log("result: ", result);
+                    console.log("results: ", results);
+                    res.redirect("/signers");
+                })
+                .catch(err => {
+                    console.log("err: ", err);
+                });
+        }
+    }
+
+    // if (!password) {
+    //     return signatures
+    //         .updateUsers(userId, first, last, email)
     //         .then(results => {
     //             // console.log("result: ", result);
     //             console.log("results: ", results);
@@ -324,36 +391,13 @@ app.post("/profile/edit", (req, res) => {
     //         });
     // }
 
-    if (!password) {
-        return signatures
-            .updateUsers(userId, first, last, email)
-            .then(results => {
-                // console.log("result: ", result);
-                console.log("results: ", results);
-                res.redirect("/signers");
-            })
-            .catch(err => {
-                console.log("err: ", err);
-            });
-    }
-
-    // let age = req.body.age;
-    // let city = req.body.city;
-    // let url = req.body.url;
-    // let userId = req.session.userId;
-    // // console.log("age: ", age);
-    // // console.log("city: ", city);
-    // // console.log("url: ", url);
-    // // console.log("req.session.userId: ", req.session.userId);
     //
-    // signatures.updateProfiles(age, city, url, userId).then(() => {
-    //     res.redirect("/signers").catch(err => {
-    //         console.log("err: ", err);
-    //     });
-    // });
+    //
 });
 
-app.listen(process.env.PORT || 8080, () => console.log("listening"));
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080, () => console.log("listening"));
+}
 
 // console.log("req.session before: ", req.session);
 // req.session.peppermint = "hello";
