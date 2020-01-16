@@ -94,21 +94,21 @@ exports.getUsersData = function(id) {
         .then(({ rows }) => rows);
 };
 
-exports.updateUsers = function(first, last, email, userId) {
+exports.updateUsers = function(userId, first, last, email) {
     return db.query(
-        `UPDATE users (first, last, email)
-        SET first = $1, last = $2, email = $3
-        WHERE users.id = $4`,
-        [first, last, email, userId]
+        `UPDATE users 
+        SET first = $2, last = $3, email = $4
+        WHERE id = $1`,
+        [userId, first, last, email]
     );
 };
 
-exports.updateUsersPass = function(first, last, email, hashedPass, userId) {
+exports.updateUsersPass = function(userId, first, last, email, hashedPass) {
     return db.query(
-        `UPDATE users (first, last, email)
-        SET first = $1, last = $2, email = $3, hashedPass = $4
-        WHERE users.id = $5`,
-        [first, last, email, hashedPass, userId]
+        `UPDATE users
+        SET first = $2, last = $3, email = $4, hashedPass = $5
+        WHERE id = $1`,
+        [userId, first, last, email, hashedPass]
     );
 };
 

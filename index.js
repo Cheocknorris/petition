@@ -5,7 +5,8 @@ const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const bcrypt = require("./bcrypt");
-let userNotFound = false;
+// helmet = require("helmet"); Need to do this later
+let errorMessage;
 let cookie;
 
 //this configures express to use express-handlebars
@@ -128,7 +129,7 @@ app.post("/profile", (req, res) => {
 
     signatures
         .addProfiles(age, city, url, cookie.userId)
-        .then(function(results) {
+        .then(results => {
             console.log("results: ", results);
             res.redirect("/petition");
         })
@@ -146,7 +147,7 @@ app.get("/login", (req, res) => {
         res.render("login", {
             title: "Log in",
             layout: "main",
-            userNotFound
+            errorMessage
         });
     }
 });
@@ -166,11 +167,11 @@ app.post("/login", (req, res) => {
                     .then(comparison => {
                         console.log("comparison:", comparison);
                         if (comparison) {
-                            userNotFound = false;
+                            errorMessage = false;
                             cookie.userId = results.rows[0].id;
                             res.redirect("/petition");
                         } else {
-                            userNotFound = true;
+                            errorMessage = true;
                             res.redirect("/login");
                         }
                     });
@@ -281,31 +282,62 @@ app.get("/profile/edit", (req, res) => {
 });
 
 app.post("/profile/edit", (req, res) => {
-    // let first = req.body.first;
-    // let last = req.body.last;
-    // let email = req.body.email;
-    // let password = req.body.password;
-    // let hashedPass;
-    // console.log("first: ", first);
-    // console.log("last: ", last);
-    // console.log("email: ", email);
-    // console.log("password: ", password);
-
     console.log("post req in edit happenig");
-    let age = req.body.age;
-    let city = req.body.city;
-    let url = req.body.url;
+    let first = req.body.first;
+    let last = req.body.last;
+    let email = req.body.email;
+    let password = req.body.password;
+    let hashedPass;
     let userId = req.session.userId;
-    console.log("age: ", age);
-    console.log("city: ", city);
-    console.log("url: ", url);
-    console.log("req.session.userId: ", req.session.userId);
+    console.log("first: ", first);
+    console.log("last: ", last);
+    console.log("email: ", email);
+    console.log("password: ", password);
+    console.log("userId: ", userId);
 
-    signatures.updateProfiles(age, city, url, userId).then(() => {
-        res.redirect("/signers").catch(err => {
-            console.log("err: ", err);
-        });
-    });
+    if (password) {
+        bcrypt
+            .hash(password)
+            .then(hashPass => {
+                // console.log("hashPass: ", hashPass);
+                hashedPass = hashPass;
+                console.log("hashedPass: ", hashedPass);
+                return hashedPass;
+            })
+            .then(hash => {
+                console.log(hash);
+                return signatures.updateUsersPass(
+                    userId,
+                    first,
+                    last,
+                    email,
+                    hashedPass
+                );
+            })
+            .then(results => {
+                // console.log("result: ", result);
+                console.log("results: ", results);
+                res.redirect("/signers");
+            })
+            .catch(err => {
+                console.log("err: ", err);
+            });
+    }
+
+    // let age = req.body.age;
+    // let city = req.body.city;
+    // let url = req.body.url;
+    // let userId = req.session.userId;
+    // // console.log("age: ", age);
+    // // console.log("city: ", city);
+    // // console.log("url: ", url);
+    // // console.log("req.session.userId: ", req.session.userId);
+    //
+    // signatures.updateProfiles(age, city, url, userId).then(() => {
+    //     res.redirect("/signers").catch(err => {
+    //         console.log("err: ", err);
+    //     });
+    // });
 });
 
 app.listen(process.env.PORT || 8080, () => console.log("listening"));
