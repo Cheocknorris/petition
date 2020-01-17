@@ -6,6 +6,7 @@ const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const bcrypt = require("./bcrypt");
+const { requireSignature, requireLogedInUser } = require("./middleware");
 // helmet = require("helmet"); Need to do this later
 let errorMessage;
 let cookie;
@@ -201,7 +202,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.get("/petition", (req, res) => {
+app.get("/petition", requireLogedInUser, (req, res) => {
     if (req.session.signature) {
         res.redirect("/thanks");
     } else {
@@ -241,14 +242,14 @@ app.post("/petition", (req, res) => {
 
 // to get id add another then to addSignatures return => console.log(result)
 
-app.get("/thanks", (req, res) => {
+app.get("/thanks", requireLogedInUser, requireSignature, (req, res) => {
     res.render("thanks", {
         title: "Thanks",
         layout: "main"
     });
 });
 
-app.get("/signers", (req, res) => {
+app.get("/signers", requireLogedInUser, (req, res) => {
     signatures
         .getSigners()
         .then(rows => {
@@ -263,7 +264,7 @@ app.get("/signers", (req, res) => {
         });
 });
 
-app.get("/signers/:city", (req, res) => {
+app.get("/signers/:city", requireLogedInUser, (req, res) => {
     // let city = req.params.city;
     console.log("city: ", req.params.city);
     signatures
@@ -280,7 +281,7 @@ app.get("/signers/:city", (req, res) => {
         });
 });
 
-app.get("/profile/edit", (req, res) => {
+app.get("/profile/edit", requireLogedInUser, (req, res) => {
     console.log("edit req happening");
     console.log("session at edit: ", req.session);
     signatures
