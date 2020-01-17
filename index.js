@@ -182,10 +182,15 @@ app.post("/login", (req, res) => {
                                     }
                                 });
                         } else {
+                            console.log("comparison failed");
                             errorMessage = true;
                             res.redirect("/login");
                         }
                     });
+            } else {
+                console.log("email not found");
+                errorMessage = true;
+                res.redirect("/login");
             }
         })
         .catch(err => {
