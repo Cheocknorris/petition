@@ -170,6 +170,7 @@ app.post("/login", (req, res) => {
                         if (comparison) {
                             errorMessage = false;
                             cookie.userId = results.rows[0].id;
+                            console.log("cookie", cookie);
                             res.redirect("/petition");
                         } else {
                             errorMessage = true;
@@ -373,7 +374,7 @@ app.post("/signature/delete", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-    req.session.signature = null;
+    // req.session.signature = null;
     req.session.userId = null;
     res.redirect("/login");
 });
