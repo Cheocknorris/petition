@@ -7,11 +7,11 @@
 	<h2 class="error">You have to register to continue</h2>
 	{{/if}}
     <form method = "POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <input id="name" name= "first" placeholder="First name">
     <input name= "last" placeholder="Last name">
     <input name="email" placeholder="Email Address">
     <input type="password" name="password" placeholder="Password">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button name="button">Register</button>
 
     </form>

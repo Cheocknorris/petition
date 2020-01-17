@@ -170,8 +170,17 @@ app.post("/login", (req, res) => {
                         if (comparison) {
                             errorMessage = false;
                             cookie.userId = results.rows[0].id;
-                            console.log("cookie", cookie);
-                            res.redirect("/petition");
+                            signatures
+                                .getSignerId(results.rows[0].id)
+                                .then(results => {
+                                    console.log("results: ", results);
+                                    if (results.length > 0) {
+                                        cookie.signature = results[0].id;
+                                        res.redirect("/thanks");
+                                    } else {
+                                        res.redirect("/petition");
+                                    }
+                                });
                         } else {
                             errorMessage = true;
                             res.redirect("/login");
@@ -374,7 +383,7 @@ app.post("/signature/delete", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-    // req.session.signature = null;
+    req.session.signature = null;
     req.session.userId = null;
     res.redirect("/login");
 });

@@ -7,11 +7,14 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost:5432/petition"
 );
 
-// db.query(`SELECT * FROM cities`).then(result => console.log(result));
-// You can only get the rows in the Object
-
 exports.getSignatures = function() {
     return db.query(`SELECT * FROM signatures`).then(({ rows }) => rows);
+};
+
+exports.getSignerId = function(userId) {
+    return db
+        .query(`SELECT id FROM signatures WHERE user_id=$1`, [userId])
+        .then(({ rows }) => rows);
 };
 
 // whenever we add values to queries, use $number to protect from attaks
