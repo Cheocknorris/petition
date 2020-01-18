@@ -7,6 +7,12 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost:5432/petition"
 );
 
+exports.getSignature = function(id) {
+    return db
+        .query(`SELECT signature FROM signatures WHERE id=$1`, [id])
+        .then(({ rows }) => rows);
+};
+
 exports.getSignatures = function() {
     return db.query(`SELECT * FROM signatures`).then(({ rows }) => rows);
 };

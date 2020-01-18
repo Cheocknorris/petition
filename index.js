@@ -223,11 +223,11 @@ app.post("/petition", (req, res) => {
 
     signatures
         .addSignatures(signature, cookie.userId)
-        .then(function(results) {
+        .then(results => {
             console.log("results: ", results);
             console.log("results id: ", results.rows[0].id);
             cookie.signature = results.rows[0].id;
-            console.log("cookie: ", cookie.signature);
+            console.log("cookie signature: ", cookie.signature);
             res.render("thanks", {
                 signature
             });
@@ -243,10 +243,20 @@ app.post("/petition", (req, res) => {
 // to get id add another then to addSignatures return => console.log(result)
 
 app.get("/thanks", requireLogedInUser, requireSignature, (req, res) => {
-    res.render("thanks", {
-        title: "Thanks",
-        layout: "main"
-    });
+    signatures
+        .getSignature(req.session.signature)
+        .then(rows => {
+            console.log("rows: ", rows);
+            let signature = rows[0].signature;
+            res.render("thanks", {
+                title: "Thanks",
+                layout: "main",
+                signature
+            });
+        })
+        .catch(err => {
+            console.log("err: ", err);
+        });
 });
 
 app.get("/signers", requireLogedInUser, (req, res) => {
