@@ -128,16 +128,30 @@ app.post("/profile", (req, res) => {
     cookie = req.session;
     console.log("post req in profile happening");
     // console.log("req body: ", req.body);
+    if (url.startsWith("https://") || url.startsWith("https://")) {
+        signatures
+            .addProfiles(age, city, url, cookie.userId)
+            .then(results => {
+                console.log("results: ", results);
+                res.redirect("/petition");
+            })
+            .catch(err => {
+                console.log("err: ", err);
+            });
+    } else {
+        let http = "http://";
+        let httpUrl = http.concat(url);
 
-    signatures
-        .addProfiles(age, city, url, cookie.userId)
-        .then(results => {
-            console.log("results: ", results);
-            res.redirect("/petition");
-        })
-        .catch(err => {
-            console.log("err: ", err);
-        });
+        signatures
+            .addProfiles(age, city, httpUrl, cookie.userId)
+            .then(results => {
+                console.log("results: ", results);
+                res.redirect("/petition");
+            })
+            .catch(err => {
+                console.log("err: ", err);
+            });
+    }
 });
 
 app.get("/login", (req, res) => {
@@ -355,7 +369,16 @@ app.post("/profile/edit", (req, res) => {
                     );
                 })
                 .then(() => {
-                    signatures.updateProfiles(age, city, url, userId);
+                    if (
+                        url.startsWith("https://") ||
+                        url.startsWith("https://")
+                    ) {
+                        signatures.updateProfiles(age, city, url, userId);
+                    } else {
+                        let http = "http://";
+                        let httpUrl = http.concat(url);
+                        signatures.updateProfiles(age, city, httpUrl, userId);
+                    }
                 })
                 .then(() => {
                     res.redirect("/signers");
@@ -372,7 +395,16 @@ app.post("/profile/edit", (req, res) => {
             return signatures
                 .updateUsers(userId, first, last, email)
                 .then(() => {
-                    signatures.updateProfiles(age, city, url, userId);
+                    if (
+                        url.startsWith("https://") ||
+                        url.startsWith("https://")
+                    ) {
+                        signatures.updateProfiles(age, city, url, userId);
+                    } else {
+                        let http = "http://";
+                        let httpUrl = http.concat(url);
+                        signatures.updateProfiles(age, city, httpUrl, userId);
+                    }
                 })
                 .then(() => {
                     res.redirect("/signers");
