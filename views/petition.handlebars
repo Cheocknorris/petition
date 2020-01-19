@@ -1,3 +1,22 @@
+<header>
+	<div class="logo">
+		spicedChange.org
+	</div>
+	<div class="menu">
+		<a id="petition-link" class="current" class="menu-link" href="/petition">Sign the petition</a>
+	</div>
+	<div class="menu">
+		<a id="profile-link" class="menu-link" href="/profile/edit">Edit my profile</a>
+	</div>
+	<div class="menu">
+		<a id="signers-link" class="menu-link" href="/signers">Who has signed</a>
+	</div>
+
+	<div class="menu">
+		<a id="logout-link" class="menu-link" href="/logout">Log out</a>
+	</div>
+</header>
+
 <div id="title">
 	<h1 class="title">Make Spiced Academy pet friendly</h1>
 	{{#if err}}
@@ -8,6 +27,7 @@
 	<img id="dog" src="\dogcode2.jpg" alt="">
 	<!-- <div id="form-contaniner"> -->
 		<form method = "POST">
+			<p id="signature-text">Sign here with your mouse:</p>
 		<!-- <input id="name" name= "first" placeholder="First name">
 		<input name= "last" placeholder="Last name"> -->
 		<input name= "signature" type="hidden">

@@ -6,7 +6,11 @@ const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const bcrypt = require("./bcrypt");
-const { requireSignature, requireLogedInUser } = require("./middleware");
+const {
+    requireSignature,
+    requireLogedInUser,
+    requireLogedOutUser
+} = require("./middleware");
 // helmet = require("helmet"); Need to do this later
 let errorMessage;
 let cookie;
@@ -154,7 +158,7 @@ app.post("/profile", (req, res) => {
     }
 });
 
-app.get("/login", (req, res) => {
+app.get("/login", requireLogedOutUser, (req, res) => {
     if (req.session.signature) {
         res.redirect("/thanks");
     } else if (req.session.userId) {

@@ -1,18 +1,30 @@
 
-<div id="register-container">
-    <h1 class="title">Make Spiced Academy pet friendly</h1>
-    <img class="dog-small" src="\dogcode2.jpg" alt="">
-    <h3 class="subtitle">Register and make it happen!</h3>
-    {{#if err}}
-	<h2 class="error">You have to register to continue</h2>
-	{{/if}}
-    <form method = "POST">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <input id="name" name= "first" placeholder="First name">
-    <input name= "last" placeholder="Last name">
-    <input name="email" placeholder="Email Address">
-    <input type="password" name="password" placeholder="Password">
-    <button name="button">Register</button>
+<h1 id="register-logo">spicedChange.org</h1>
+<div id="register-main">
+    <div id="presetation">
+        <!-- <img id="dog-register" src="\dogcode2.jpg" alt=""> -->
+        <p>Many aspiring web developer pet owners have a hard time leaving their best friends home while they spend the entire day trying to learn this difficult skill.</p>
+        <p>On the other hand, it is a proved fact that spending time around animals can significantly reduce stress levels. </p>
 
-    </form>
+        <h2 >So, why not make Spiced Academy pet friendly?</h2>
+    </div>
+    <div id="register-container">
+        <!-- <img class="dog-small" src="\dogcode2.jpg" alt=""> -->
+        <!-- <h1  class="title">Make Spiced Academy pet friendly</h1> -->
+        <h1 class="subtitle">Register and make it happen!</h1>
+        {{#if err}}
+    	<h2 class="error">Sorry, but you have to register to continue...</h2>
+    	{{/if}}
+        <form method = "POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <input id="name" name= "first" placeholder="First name">
+        <input name= "last" placeholder="Last name">
+        <input name="email" placeholder="Email Address">
+        <input type="password" name="password" placeholder="Password">
+        <button id="register-button" name="button">Register</button>
+        <a href="/login">Already a member? Click here to log in</a>
+
+        </form>
+    </div>
+
 </div>

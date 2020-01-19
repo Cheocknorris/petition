@@ -1,13 +1,15 @@
 <div id="login-container">
-    <img class="dog-small" src="\dogcode2.jpg" alt="">
-    {{#if errorMessage}}
-	<h3 class="error">Invalid email or password</h3>
-	{{/if}}
+    <h1 id="login-logo">spicedChange.org</h1>
+    <!-- <img class="dog-small" src="\dogcode2.jpg" alt=""> -->
     <h2 class="subtitle">Please log in to sign the petition</h2>
+    {{#if errorMessage}}
+    <h3 class="error">Invalid email or password</h3>
+    {{/if}}
     <form method = "POST">
     <input name="email" placeholder="Email Address">
     <input type="password" name="password" placeholder="Password">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button name="button">Log in</button>
+    <button id="login-button" name="button">Log in</button>
+    <a href="/register">Not a member yet? Click here to register</a>
     </form>
 </div>

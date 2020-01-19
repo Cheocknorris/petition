@@ -1,13 +1,46 @@
 
+<header>
+	<div class="logo">
+		spicedChange.org
+	</div>
+	<div class="menu">
+		<a id="petition-link" class="menu-link" href="/petition">Sign the petition</a>
+	</div>
+	<div class="menu">
+		<a id="profile-link"  class="menu-link" href="/profile/edit">Edit my profile</a>
+	</div>
+	<div class="menu">
+		<a id="signers-link" class="current" class="menu-link" href="/signers">Who has signed</a>
+	</div>
+
+	<div class="menu">
+		<a id="logout-link" class="menu-link" href="/logout">Log out</a>
+	</div>
+</header>
 
 <div id="signers-contaniner">
     <h2 id="now">By now, this people signed the petition: </h2>
     <div class="signers">
         {{#rows}}
             {{#if url}}
-        <p class="signer"><a href="{{url}}" target="_blank">{{first}} </a> {{last}} {{age}} <a href="/signers/{{city}}">{{city}}</a></p>
+        <!-- <div class="signers"> -->
+			<ul>
+				<li class="signer"> <span class="tag">Name:</span>  <a href="{{url}}" target="_blank"> {{first}} </a>{{last}}</li>
+				<li class="signer"> <span class="tag">Age:</span> {{age}}</li>
+				<li class="signer"> <span class="tag">City:</span> <a href="/signers/{{city}}">{{city}}</a> </li>
+			</ul>
+
+		<!-- </div> -->
             {{else}}
-            <p class="signer">{{first}} {{last}} {{age}} <a href="/signers/{{city}}">{{city}}</a> </p>
+            <!-- <div class="signers"> -->
+				<ul>
+					<li class="signer"><span class="tag">Name:</span> {{first}} {{last}} </li>
+					<li class="signer"><span class="tag">Age:</span> {{age}}</li>
+					<li class="signer"><span class="tag">City:</span> <a href="/signers/{{city}}">{{city}}</a></li>
+				</ul>
+
+
+			<!-- </div> -->
             {{/if}}
         {{/rows}}
     </div>
