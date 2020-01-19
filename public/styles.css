@@ -1,6 +1,9 @@
 body {
     margin: 0;
     background-image: url("/world-map-dotted.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 body:before {
@@ -112,6 +115,11 @@ p {
     margin-bottom: 30px;
 }
 
+#not {
+    text-align: center;
+    color: #484848;
+}
+
 .dog-small {
     height: 150px;
     width: 150px;
@@ -207,9 +215,13 @@ header {
 
 .error {
     color: #ed2d23;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
     font-size: 20px;
     font-family: "Noto Sans", sans-serif;
+}
+
+#petition-error {
+    text-align: center;
 }
 
 strong {
