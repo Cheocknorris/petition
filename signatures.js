@@ -66,6 +66,15 @@ exports.addProfiles = function(age, city, url, user_id) {
     );
 };
 
+exports.addNoUrl = function(age, city, user_id) {
+    return db.query(
+        `INSERT INTO profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3)
+        returning id`,
+        [age, city, user_id]
+    );
+};
+
 exports.getSigners = function() {
     return db
         .query(

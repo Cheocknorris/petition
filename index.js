@@ -132,9 +132,13 @@ app.post("/profile", (req, res) => {
     cookie = req.session;
     console.log("post req in profile happening");
     // console.log("req body: ", req.body);
-    if (url.startsWith("https://") || url.startsWith("https://")) {
+
+    if (url && (!url.startsWith("http://") || !url.startsWith("https://"))) {
+        let http = "http://";
+        let httpUrl = http.concat(url);
+
         signatures
-            .addProfiles(age, city, url, cookie.userId)
+            .addProfiles(age, city, httpUrl, cookie.userId)
             .then(results => {
                 console.log("results: ", results);
                 res.redirect("/petition");
@@ -143,11 +147,8 @@ app.post("/profile", (req, res) => {
                 console.log("err: ", err);
             });
     } else {
-        let http = "http://";
-        let httpUrl = http.concat(url);
-
         signatures
-            .addProfiles(age, city, httpUrl, cookie.userId)
+            .addProfiles(age, city, url, cookie.userId)
             .then(results => {
                 console.log("results: ", results);
                 res.redirect("/petition");
@@ -374,14 +375,21 @@ app.post("/profile/edit", (req, res) => {
                 })
                 .then(() => {
                     if (
-                        url.startsWith("https://") ||
-                        url.startsWith("https://")
+                        url &&
+                        (!url.startsWith("http://") ||
+                            !url.startsWith("https://"))
                     ) {
-                        signatures.updateProfiles(age, city, url, userId);
-                    } else {
                         let http = "http://";
                         let httpUrl = http.concat(url);
-                        signatures.updateProfiles(age, city, httpUrl, userId);
+
+                        signatures.addProfiles(
+                            age,
+                            city,
+                            httpUrl,
+                            cookie.userId
+                        );
+                    } else {
+                        signatures.addProfiles(age, city, url, cookie.userId);
                     }
                 })
                 .then(() => {
@@ -400,14 +408,21 @@ app.post("/profile/edit", (req, res) => {
                 .updateUsers(userId, first, last, email)
                 .then(() => {
                     if (
-                        url.startsWith("https://") ||
-                        url.startsWith("https://")
+                        url &&
+                        (!url.startsWith("http://") ||
+                            !url.startsWith("https://"))
                     ) {
-                        signatures.updateProfiles(age, city, url, userId);
-                    } else {
                         let http = "http://";
                         let httpUrl = http.concat(url);
-                        signatures.updateProfiles(age, city, httpUrl, userId);
+
+                        signatures.addProfiles(
+                            age,
+                            city,
+                            httpUrl,
+                            cookie.userId
+                        );
+                    } else {
+                        signatures.addProfiles(age, city, url, cookie.userId);
                     }
                 })
                 .then(() => {
